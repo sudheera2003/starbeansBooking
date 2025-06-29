@@ -7,21 +7,21 @@
     <style>
 
       :root{
-        --background-color: #163266;
+        --background-color: #105532;
         --normalText-color: #F3F1C4;
         --innerText-color: #F3F1C4;
-        --calendarHover-color: #23427c;
+        --calendarHover-color: #156d41;
         --calendarText-color: #F3F1C4;
-        --calendarSelect-color: #143168;
-        --calendarToday-color: #203c70;
+        --calendarSelect-color: #0b3b23;
+        --calendarToday-color: #156d41;
         --calendarOther-color: #ccc;
         --border-color: #F3F1C4;
         --borderOther-color: #ccc;
-        --timeSlot-color: #22417a;
-        --timeSlotHover-color: #1e3a6e;
-        --timeSlotSelect-color: #143168;
-        --reserveHover-color: #23427c;
-        --reserveBackground-color: #143168;
+        --timeSlot-color: #0a6839;
+        --timeSlotHover-color: #156d41;
+        --timeSlotSelect-color: #0b3b23;
+        --reserveHover-color: #0a6839;
+        --reserveBackground-color: #125c37;
       }
 
       /* footer styles */
@@ -1101,7 +1101,11 @@
 
         <!-- Date Selection Calendar -->
 <div class="calendar-section">
-    <p style="text-align: left; color: #F3F1C4;">Select a Date :</p>
+  <div style="display: flex; margin-bottom: 20px;">
+    <p style="text-align: left; color: #F3F1C4;">Selected Date :</p>
+    <p id="selectedDateDisplay" style="text-align: left; color: #F3F1C4; display: none; margin-left: 10px;"></p>
+    
+  </div>
     <div class="calendar-container">
         <div class="calendar-header">
             <label>Date</label>
@@ -1191,16 +1195,15 @@
     </div>
 
 
-
-    <script>
-
-        // Calendar functionality
+<script>
+  // Calendar functionality
 class Calendar {
     constructor() {
         this.currentDate = new Date();
         this.selectedDate = null;
         this.monthSelect = document.getElementById('monthSelect');
         this.calendarDays = document.getElementById('calendarDays');
+        this.selectedDateDisplay = document.getElementById('selectedDateDisplay');
         
         this.init();
     }
@@ -1287,11 +1290,27 @@ class Calendar {
                 dayElement.classList.add('selected');
                 this.selectedDate = new Date(currentYear, currentMonth, day);
                 
-                console.log('Selected date:', this.selectedDate);
+                // Display the selected date
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                this.selectedDateDisplay.textContent = this.selectedDate.toLocaleDateString('en-US', options);
+                this.selectedDateDisplay.style.display = 'block';
             }
         });
         
         return dayElement;
+    }
+    
+    selectToday() {
+        const today = new Date();
+        if (today.getMonth() === this.currentDate.getMonth() && 
+            today.getFullYear() === this.currentDate.getFullYear()) {
+            const days = this.calendarDays.querySelectorAll('.calendar-day:not(.other-month)');
+            days.forEach(day => {
+                if (parseInt(day.textContent) === today.getDate()) {
+                    day.click(); // Trigger click to select
+                }
+            });
+        }
     }
     
     getSelectedDate() {
@@ -1299,113 +1318,156 @@ class Calendar {
     }
 }
 
-// Initialize calendar when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if calendar elements exist before initializing
-    if (document.getElementById('monthSelect') && document.getElementById('calendarDays')) {
-        window.calendar = new Calendar();
+// Booking form functionality
+function setupBookingForm() {
+    // Add interactivity for time slot selection
+    const timeSlots = document.querySelectorAll('.time-slot');
+    
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', function() {
+            // Remove selected class from all slots
+            timeSlots.forEach(s => s.classList.remove('selected'));
+            // Add selected class to clicked slot
+            this.classList.add('selected');
+        });
+    });
+}
+
+// Form submission handler
+function submitReservation() {
+    const name = document.querySelector('input[type="text"]').value;
+    const email = document.querySelectorAll('input[type="text"]')[1].value;
+    const partySize = document.querySelector('select').value;
+    const contact = document.querySelectorAll('input[type="text"]')[2].value;
+    const timeSlot = document.querySelector('.time-slot.selected')?.textContent;
+    const additionalInfo = document.getElementById('info').value;
+    const selectedDate = window.calendar.getSelectedDate();
+    
+    if (!timeSlot) {
+        alert('Please select a time slot.');
+        return;
     }
-});
+    
+    if (!contact.trim()) {
+        alert('Please provide your contact information.');
+        return;
+    }
+    
+    if (!selectedDate) {
+        alert('Please select a date.');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('partySize', partySize);
+    formData.append('contact', contact);
+    formData.append('timeSlot', timeSlot);
+    formData.append('additionalInfo', additionalInfo);
+    formData.append('selectedDate', selectedDate.toISOString());
+    
+    // Show loading state
+    const reserveBtn = document.querySelector('.reserve-btn');
+    reserveBtn.disabled = true;
+    reserveBtn.textContent = 'Processing...';
+    
+    // Send to both email processors
+    const promises = [
+        fetch('email_send_admin.php', { method: 'POST', body: formData }),
+        fetch('email_send_user.php', { method: 'POST', body: formData })
+    ];
+    
+    Promise.all(promises)
+        .then(responses => {
+            if (responses.every(r => r.ok)) {
+                alert('Reservation submitted successfully! You will receive a confirmation email shortly.');
+            } else {
+                throw new Error('One or more email services failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error submitting your reservation. Please try again or contact us directly.');
+        })
+        .finally(() => {
+            reserveBtn.disabled = false;
+            reserveBtn.textContent = 'Reserve Now';
+        });
+}
 
-        //booking section js
+// Navbar functionality
+function setupNavbar() {
+    const hamburger = document.querySelector(".hamburger");
+    const navLinks = document.querySelector(".nav-links");
+    const overlay = document.querySelector(".mobile-overlay");
 
-        // Add interactivity for time slot selection
-        const timeSlots = document.querySelectorAll('.time-slot');
-        
-        timeSlots.forEach(slot => {
-            slot.addEventListener('click', function() {
-                // Remove selected class from all slots
-                timeSlots.forEach(s => s.classList.remove('selected'));
-                // Add selected class to clicked slot
-                this.classList.add('selected');
-                
-                // Update the time dropdown to match selected slot
-                const timeSelects = document.querySelectorAll('select');
-                const timeSelect = timeSelects[1]; // Second select is the time dropdown
-                if (timeSelect) {
-                    timeSelect.value = this.textContent;
+    hamburger.addEventListener("click", function () {
+        this.classList.toggle("active");
+        navLinks.classList.toggle("active");
+        overlay.classList.toggle("active");
+    });
+
+    overlay.addEventListener("click", function () {
+        hamburger.classList.remove("active");
+        navLinks.classList.remove("active");
+        this.classList.remove("active");
+    });
+
+    // Close dropdowns when clicking elsewhere on mobile
+    if (window.innerWidth <= 1024) {
+        document.addEventListener("click", function (e) {
+            const dropdowns = document.querySelectorAll(".dropdown");
+            dropdowns.forEach((dropdown) => {
+                if (
+                    !dropdown.contains(e.target) &&
+                    !dropdown.previousElementSibling.contains(e.target)
+                ) {
+                    dropdown.style.maxHeight = "0";
                 }
             });
         });
 
-        // Reserve Now button functionality
-        document.querySelector('.reserve-btn').addEventListener('click', function() {
-            const selects = document.querySelectorAll('select');
-            const partySize = selects[0].value;
-            const selectedTimeSlot = document.querySelector('.time-slot.selected');
-            const contactInput = document.querySelector('input[type="text"]');
-            
-            if (!selectedTimeSlot) {
-                alert('Please select a time slot.');
-                return;
-            }
-            
-            if (!contactInput.value.trim()) {
-                alert('Please provide your contact information.');
-                return;
-            }
-            
-            const selectedTime = selectedTimeSlot.textContent;
-            const contact = contactInput.value;
-            
-            alert(`Reservation details:\nParty Size: ${partySize} guests\nTime: ${selectedTime}\nContact: ${contact}`);
-        });
-
-
-        // nav bar js
-      document.addEventListener("DOMContentLoaded", function () {
-        const hamburger = document.querySelector(".hamburger");
-        const navLinks = document.querySelector(".nav-links");
-        const overlay = document.querySelector(".mobile-overlay");
-
-        hamburger.addEventListener("click", function () {
-          this.classList.toggle("active");
-          navLinks.classList.toggle("active");
-          overlay.classList.toggle("active");
-        });
-
-        overlay.addEventListener("click", function () {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("active");
-          this.classList.remove("active");
-        });
-
-        // Close dropdowns when clicking elsewhere on mobile
-        if (window.innerWidth <= 1024) {
-          document.addEventListener("click", function (e) {
-            const dropdowns = document.querySelectorAll(".dropdown");
-            dropdowns.forEach((dropdown) => {
-              if (
-                !dropdown.contains(e.target) &&
-                !dropdown.previousElementSibling.contains(e.target)
-              ) {
-                dropdown.style.maxHeight = "0";
-              }
-            });
-          });
-
-          // Toggle dropdowns on mobile
-          const dropdownParents = document.querySelectorAll(
+        // Toggle dropdowns on mobile
+        const dropdownParents = document.querySelectorAll(
             ".nav-links > li:has(.dropdown)"
-          );
-          dropdownParents.forEach((parent) => {
+        );
+        dropdownParents.forEach((parent) => {
             const link = parent.querySelector("a");
             link.addEventListener("click", function (e) {
-              if (window.innerWidth <= 1024) {
-                e.preventDefault();
-                const dropdown = parent.querySelector(".dropdown");
-                dropdown.style.maxHeight =
-                  dropdown.style.maxHeight === "0px" ||
-                  !dropdown.style.maxHeight
-                    ? "500px"
-                    : "0";
-              }
+                if (window.innerWidth <= 1024) {
+                    e.preventDefault();
+                    const dropdown = parent.querySelector(".dropdown");
+                    dropdown.style.maxHeight =
+                        dropdown.style.maxHeight === "0px" ||
+                        !dropdown.style.maxHeight
+                            ? "500px"
+                            : "0";
+                }
             });
-          });
-        }
-      });
+        });
+    }
+}
 
-    </script>
+// Initialize everything when DOM is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize calendar
+    if (document.getElementById('monthSelect') && document.getElementById('calendarDays')) {
+        window.calendar = new Calendar();
+        // Select today's date by default
+        setTimeout(() => calendar.selectToday(), 100);
+    }
+    
+    // Setup booking form
+    setupBookingForm();
+    
+    // Setup navbar
+    setupNavbar();
+    
+    // Attach submit handler to reserve button
+    document.querySelector('.reserve-btn').addEventListener('click', submitReservation);
+});
+</script>
 
   </body>
 

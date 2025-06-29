@@ -1,33 +1,4 @@
-<?php
-header('Content-Type: application/json');
-
-include "SMTP.php";
-include "PHPMailer.php";
-include "Exception.php";
-
-use PHPMailer\PHPMailer\PHPMailer;
-
-// Initialize response array
-$response = ['success' => false, 'message' => ''];
-
-try {
-    // Get POST data
-
-    $name = $_POST['name'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $partySize = $_POST['partySize'] ?? '';
-    $contact = $_POST['contact'] ?? '';
-    $timeSlot = $_POST['timeSlot'] ?? '';
-    $additionalInfo = $_POST['additionalInfo'] ?? '';
-    $selectedDate = $_POST['selectedDate'] ?? '';
-
-    if ($additionalInfo === '') {
-        $additionalInfo = 'No additional information provided.';
-    }
-
-
-    $body = '
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -264,17 +235,17 @@ try {
         
         <!-- Thank You Section -->
         <div class="thank-you-section">
-            <h2>We have Received Your Reservation Request</h2>
-            <p>Thank you for choosing Ocean Bistro. We are excited to serve you!</p>
+            <h2>We've Received Your Reservation Request</h2>
+            <p>Thank you for choosing The Barn Restaurant. We're excited to serve you!</p>
         </div>
         
         <!-- Content -->
         <div class="content">
             <div class="greeting">
-                Dear '.$name.',
+                Dear {{CUSTOMER_NAME}},
             </div>
             
-            <p>Thank you for choosing <strong>Ocean Bistro Restaurant</strong> for your dining experience! We have successfully received your reservation request and truly appreciate your request.</p>
+            <p>Thank you for choosing <strong>The Barn Restaurant</strong> for your dining experience! We have successfully received your reservation request and truly appreciate your request.</p>
             
             <!-- Reservation Summary -->
             <div class="reservation-summary">
@@ -282,37 +253,37 @@ try {
                 
                 <div class="detail-row">
                     <div class="detail-label">Name:</div>
-                    <div class="detail-value">'.$name.'</div>
+                    <div class="detail-value">{{CUSTOMER_NAME}}</div>
                 </div>
                 
                 <div class="detail-row">
                     <div class="detail-label">Email:</div>
-                    <div class="detail-value">'.$email.'</div>
+                    <div class="detail-value">{{CUSTOMER_EMAIL}}</div>
                 </div>
                 
                 <div class="detail-row">
-                    <div class="detail-label">Contact:</div>
-                    <div class="detail-value">'.$contact.'</div>
+                    <div class="detail-label">Phone:</div>
+                    <div class="detail-value">{{CUSTOMER_PHONE}}</div>
                 </div>
                 
                 <div class="detail-row">
                     <div class="detail-label">Party Size:</div>
-                    <div class="detail-value">'.$partySize.' guests</div>
+                    <div class="detail-value">{{PARTY_COUNT}} guests</div>
                 </div>
                 
                 <div class="detail-row">
                     <div class="detail-label">Date:</div>
-                    <div class="detail-value">'.$selectedDate.'</div>
+                    <div class="detail-value">{{RESERVATION_DATE}}</div>
                 </div>
                 
                 <div class="detail-row">
                     <div class="detail-label">Time:</div>
-                    <div class="detail-value">'.$timeSlot.'</div>
+                    <div class="detail-value">{{RESERVATION_TIME}}</div>
                 </div>
                 
                 <div class="detail-row">
                     <div class="detail-label">Submitted:</div>
-                    <div class="detail-value">'.date("Y-m-d").' at '. date("h:i:sa").'</div>
+                    <div class="detail-value">{{SUBMISSION_TIME}}</div>
                 </div>
             </div>
             
@@ -331,17 +302,17 @@ try {
                 <ul>
                     <li><strong>Availability Check:</strong> Our team will verify table availability for your requested date and time</li>
                     <li><strong>Quick Response:</strong> A member of our staff will contact you as soon as possible to confirm your reservation</li>
-                    <li><strong>Confirmation:</strong> You will receive a confirmation call once your reservation is approved</li>
-                    <li><strong>Any Questions:</strong> We will address any special requests or dietary requirements</li>
+                    <li><strong>Confirmation:</strong> You'll receive a confirmation call once your reservation is approved</li>
+                    <li><strong>Any Questions:</strong> We'll address any special requests or dietary requirements</li>
                 </ul>
             </div>
             
-            <p>We understand that your time is valuable, and we are committed to responding to your reservation request <strong>as quickly as possible</strong>. Our team typically processes reservation requests within a few hours during business hours.</p>
+            <p>We understand that your time is valuable, and we're committed to responding to your reservation request <strong>as quickly as possible</strong>. Our team typically processes reservation requests within a few hours during business hours.</p>
             
             <!-- Additional Info if provided -->
             <div style="background-color: #D8E6FF; padding: 15px; border-radius: 5px; margin: 20px 0;">
                 <strong>Your Special Requests:</strong><br>
-                <em>'.$additionalInfo.'</em>
+                <em>{{ADDITIONAL_INFO}}</em>
             </div>
             
             <!-- Contact Information -->
@@ -356,12 +327,12 @@ try {
             <p>We look forward to welcoming you to Starbeans and providing you with an exceptional dining experience featuring the authentic tastes of the Sri Lanka.</p>
             
             <p>Warm regards,<br>
-            <strong>Ocean Bistro Restaurant Team</strong></p>
+            <strong>The Starbeans Team</strong></p>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <p><strong>Ocean Bistro Restaurant</strong></p>
+            <p><strong>The Barn Restaurant</strong></p>
             <p>📍 {{RESTAURANT_ADDRESS}}</p>
             <p>📞 {{RESTAURANT_PHONE}} | 📧 <a href="mailto:{{RESTAURANT_EMAIL}}">{{RESTAURANT_EMAIL}}</a></p>
             <p>🌐 <a href="{{WEBSITE_URL}}" style="font-size: 15px;">Visit our website</a></p>
@@ -379,35 +350,3 @@ try {
     </div>
 </body>
 </html>
-    ';
-
-    $mail = new PHPMailer;
-    $mail->IsSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'sudheeradilum@gmail.com';
-    $mail->Password = 'ffauohhfnynozkde';
-    $mail->SMTPSecure = 'ssl';
-    $mail->Port = 465;
-    $mail->setFrom($email, $name);
-    $mail->addReplyTo($email, $name);
-    $mail->addAddress('sudheeradilum@gmail.com');
-    $mail->isHTML(true);
-    $mail->Subject = "Your Reservation Request at Ocean Bistro";
-    $mail->Body = $body;
-
-    if ($mail->send()) {
-        $response['success'] = true;
-        $response['message'] = 'Your message has been sent successfully!';
-    } else {
-        throw new Exception('Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
-    }
-
-} catch (Exception $e) {
-    $response['message'] = $e->getMessage();
-}
-
-// Output the JSON response
-echo json_encode($response);
-exit;
-?>
