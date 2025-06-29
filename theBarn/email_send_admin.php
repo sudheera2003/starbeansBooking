@@ -48,7 +48,7 @@ try {
         }
         
         .header {
-            background: linear-gradient(135deg, #2d5a3d, #4a7c59);
+            background: #105532;
             color: white;
             padding: 30px 20px;
             text-align: center;
@@ -101,54 +101,13 @@ try {
             flex: 1;
         }
         
-        .status-badge {
-            display: inline-block;
-            background-color: #ffc107;
-            color: #212529;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
         .actions {
             margin: 30px 0;
             text-align: center;
         }
         
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            margin: 0 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-confirm {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        .btn-confirm:hover {
-            background-color: #218838;
-        }
-        
-        .btn-decline {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .btn-decline:hover {
-            background-color: #c82333;
-        }
-        
         .footer {
-            background-color: #2d5a3d;
+            background-color: #105532;
             color: white;
             padding: 20px;
             text-align: center;
@@ -186,11 +145,6 @@ try {
             .detail-label {
                 width: 100%;
                 margin-bottom: 5px;
-            }
-            
-            .btn {
-                display: block;
-                margin: 10px 0;
             }
         }
     </style>

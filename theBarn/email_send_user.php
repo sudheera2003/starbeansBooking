@@ -50,7 +50,7 @@ try {
         }
         
         .header {
-            background: linear-gradient(135deg, #2d5a3d, #4a7c59);
+            background: #105532;
             color: white;
             padding: 40px 20px;
             text-align: center;
