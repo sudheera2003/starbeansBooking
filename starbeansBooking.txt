@@ -1,0 +1,44 @@
+Starbeans Booking Page Details
+
+The Barn Color Details - 
+	      :root{
+        --background-color: #105532;
+        --normalText-color: #F3F1C4;
+        --innerText-color: #F3F1C4;
+        --calendarHover-color: #156d41;
+        --calendarText-color: #F3F1C4;
+        --calendarSelect-color: #0b3b23;
+        --calendarToday-color: #156d41;
+        --calendarOther-color: #ccc;
+        --border-color: #F3F1C4;
+        --borderOther-color: #ccc;
+        --timeSlot-color: #0a6839;
+        --timeSlotHover-color: #156d41;
+        --timeSlotSelect-color: #0b3b23;
+        --reserveHover-color: #0a6839;
+        --reserveBackground-color: #125c37;
+      }
+	  
+Ocean Bistro Color Details - 
+	      :root{
+        --background-color: #163266;
+        --normalText-color: #F3F1C4;
+        --innerText-color: #F3F1C4;
+        --calendarHover-color: #23427c;
+        --calendarText-color: #F3F1C4;
+        --calendarSelect-color: #143168;
+        --calendarToday-color: #203c70;
+        --calendarOther-color: #ccc;
+        --border-color: #F3F1C4;
+        --borderOther-color: #ccc;
+        --timeSlot-color: #22417a;
+        --timeSlotHover-color: #1e3a6e;
+        --timeSlotSelect-color: #143168;
+        --reserveHover-color: #23427c;
+        --reserveBackground-color: #143168;
+      }
+	  
+	  
+Email Details - 
+	app password - ffauohhfnynozkde
+	gmail -sudheeradilum@gmail.com
