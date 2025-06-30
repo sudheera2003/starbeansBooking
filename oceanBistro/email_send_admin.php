@@ -150,7 +150,7 @@ try {
         <!-- Header -->
         <div class="header">
             <h1>New Reservation Request</h1>
-            <p>For Ocean Bistro Restaurant</p>
+            <p>For Ocean Bistro by Starbeans</p>
         </div>
         
         <!-- Content -->
@@ -207,7 +207,7 @@ try {
         
         <!-- Footer -->
         <div class="footer">
-            <p><strong>Ocean Bistro Restaurant</strong></p>
+            <p><strong>Ocean Bistro by Starbeans</strong></p>
             <p>This is a system generated email</p>
         </div>
     </div>
@@ -223,6 +223,7 @@ try {
     $mail->Password = 'ffauohhfnynozkde';
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
+    $mail->CharSet = 'UTF-8';
     $mail->setFrom($email, $name);
     $mail->addReplyTo($email, $name);
     $mail->addAddress('sudheeradilum@gmail.com');

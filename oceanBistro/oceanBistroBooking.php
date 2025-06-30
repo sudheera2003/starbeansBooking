@@ -932,7 +932,29 @@
     color: white;
     font-weight: 600;
 }
+.title1{
+  font-family: 'Playfair Display', serif !important;
+  font-size: 5rem !important;
+  color:#71CDFF !important;
+}
 
+.title2{
+  font-family: 'Playfair Display', serif !important;
+  font-size: 5rem !important;
+  color: white !important;
+  margin-bottom: 100px !important;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    display: none;
+}
+
+.input-error {
+    border-color: #ff6b6b !important;
+}
 
     </style>
     <link
@@ -1037,27 +1059,31 @@
         <div class="container">
         <!-- Header -->
         <div class="header">
+          <h1 class="title1">Ocean Bistro</h1>
+          <h1 class="title2">By Starbeans</h1>
             <h1>Make a reservation</h1>
             <p>Select your details and we'll try to get the best seats for you.</p>
         </div>
 
         <!-- Form Fields -->
         <div class="form-grid">
-            <!-- Name -->
-            <div class="form-field">
-                <label>Your Name :</label>
-                <div class="input-container">
-                <input type="text" placeholder="Enter your name">
-            </div>
-            </div>
+            <!-- Name Field -->
+<div class="form-field">
+    <label>Your Name :</label>
+    <div class="input-container">
+        <input type="text" placeholder="Enter your name" id="nameInput">
+    </div>
+    <span class="error-message" id="nameError">Please enter your name</span>
+</div>
 
-            <!-- Email -->
-            <div class="form-field">
-                <label>Your Email :</label>
-                <div class="input-container">
-                <input type="text" placeholder="Enter your email">
-            </div>
-            </div>
+<!-- Email Field -->
+<div class="form-field">
+    <label>Your Email :</label>
+    <div class="input-container">
+        <input type="text" placeholder="Enter your email" id="emailInput">
+    </div>
+    <span class="error-message" id="emailError">Please enter a valid email</span>
+</div>
 
             <!-- Guest -->
             <div class="form-field">
@@ -1090,12 +1116,13 @@
         </div>
 
         <!-- Contact Field -->
-        <div class="form-field-full">
-            <label>How can we contact you :</label>
-            <div class="input-container">
-                <input type="text" placeholder="Enter your mobile number">
-            </div>
-        </div>
+<div class="form-field-full">
+    <label>How can we contact you :</label>
+    <div class="input-container">
+        <input type="text" placeholder="Enter your mobile number" id="contactInput">
+    </div>
+    <span class="error-message" id="contactError">Invalid contact information</span>
+</div>
 
         <!-- calendar section start -->
 
@@ -1152,30 +1179,29 @@
         <div class="time-slots-section">
             <h3>Choose an available time slot:</h3>
             
+            
             <div class="time-slots-grid">
                 <!-- Row 1 -->
-                <button class="time-slot">6:00 AM</button>
-                <button class="time-slot">7:00 AM</button>
-                <button class="time-slot">8:00 AM</button>
-                <button class="time-slot">9:00 AM</button>
                 <button class="time-slot">10:00 AM</button>
-                
-                <!-- Row 2 -->
                 <button class="time-slot">11:00 AM</button>
                 <button class="time-slot">12:00 PM</button>
                 <button class="time-slot">01:00 PM</button>
                 <button class="time-slot">02:00 PM</button>
-                <button class="time-slot">03:00 PM</button>
                 
-                <!-- Row 3 -->
+                <!-- Row 2 -->
+                <button class="time-slot">03:00 PM</button>
                 <button class="time-slot">04:00 PM</button>
                 <button class="time-slot">05:00 PM</button>
                 <button class="time-slot">06:00 PM</button>
                 <button class="time-slot">07:00 PM</button>
+                
+                <!-- Row 3 -->
                 <button class="time-slot">08:00 PM</button>
                 <button class="time-slot">09:00 PM</button>
                 <button class="time-slot">10:00 PM</button>
             </div>
+
+            <p id="timeSlotError" class="error-message">Please select a time slot</p>
         </div>
 
                 <!-- Additional info -->
@@ -1196,7 +1222,7 @@
 
 
 <script>
-  // Calendar functionality
+// Calendar functionality
 class Calendar {
     constructor() {
         this.currentDate = new Date();
@@ -1257,28 +1283,41 @@ class Calendar {
         }
     }
     
-    createDayElement(day, isOtherMonth) {
-        const dayElement = document.createElement('div');
-        dayElement.className = 'calendar-day';
-        dayElement.textContent = day;
-        
-        if (isOtherMonth) {
-            dayElement.classList.add('other-month');
-        }
-        
-        // Check if this is today
-        const today = new Date();
-        const currentMonth = this.currentDate.getMonth();
-        const currentYear = this.currentDate.getFullYear();
-        
-        if (!isOtherMonth && 
-            day === today.getDate() && 
-            currentMonth === today.getMonth() && 
-            currentYear === today.getFullYear()) {
-            dayElement.classList.add('today');
-        }
-        
-        // Add click event
+createDayElement(day, isOtherMonth) {
+    const dayElement = document.createElement('div');
+    dayElement.className = 'calendar-day';
+    dayElement.textContent = day;
+    
+    if (isOtherMonth) {
+        dayElement.classList.add('other-month');
+    }
+    
+    // Get current date and the date being rendered
+    const today = new Date();
+    const currentMonth = this.currentDate.getMonth();
+    const currentYear = this.currentDate.getFullYear();
+    const renderedDate = new Date(currentYear, currentMonth, day);
+    
+    // Check if this is today
+    const isToday = !isOtherMonth && 
+                   day === today.getDate() && 
+                   currentMonth === today.getMonth() && 
+                   currentYear === today.getFullYear();
+    
+    // Check if date is in the past
+    const isPastDate = renderedDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    
+    if (isToday) {
+        dayElement.classList.add('today');
+    }
+    
+    // Disable past dates
+    if (isPastDate && !isToday) {
+        dayElement.style.pointerEvents = 'none';
+        dayElement.style.opacity = '0.5';
+        dayElement.style.cursor = 'not-allowed';
+    } else {
+        // Add click event for today and future dates
         dayElement.addEventListener('click', () => {
             if (!isOtherMonth) {
                 // Remove previous selection
@@ -1296,9 +1335,10 @@ class Calendar {
                 this.selectedDateDisplay.style.display = 'block';
             }
         });
-        
-        return dayElement;
     }
+    
+    return dayElement;
+}
     
     selectToday() {
         const today = new Date();
@@ -1318,6 +1358,59 @@ class Calendar {
     }
 }
 
+// Form validation
+function validateForm() {
+    let isValid = true;
+    
+    // Name validation
+    const name = document.getElementById('nameInput').value.trim();
+    const nameError = document.getElementById('nameError');
+    if (!name) {
+        nameError.style.display = 'block';
+        document.getElementById('nameInput').classList.add('input-error');
+        isValid = false;
+    } else {
+        nameError.style.display = 'none';
+        document.getElementById('nameInput').classList.remove('input-error');
+    }
+    
+    // Email validation
+    const email = document.getElementById('emailInput').value.trim();
+    const emailError = document.getElementById('emailError');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+        emailError.style.display = 'block';
+        document.getElementById('emailInput').classList.add('input-error');
+        isValid = false;
+    } else {
+        emailError.style.display = 'none';
+        document.getElementById('emailInput').classList.remove('input-error');
+    }
+    
+    // Contact validation
+    const contact = document.getElementById('contactInput').value.trim();
+    const contactError = document.getElementById('contactError');
+    if (!contact) {
+        contactError.style.display = 'block';
+        document.getElementById('contactInput').classList.add('input-error');
+        isValid = false;
+    } else {
+        contactError.style.display = 'none';
+        document.getElementById('contactInput').classList.remove('input-error');
+    }
+    
+    // Time slot validation
+    const timeSlotError = document.getElementById('timeSlotError');
+    if (!document.querySelector('.time-slot.selected')) {
+        timeSlotError.style.display = 'block';
+        isValid = false;
+    } else {
+        timeSlotError.style.display = 'none';
+    }
+    
+    return isValid;
+}
+
 // Booking form functionality
 function setupBookingForm() {
     // Add interactivity for time slot selection
@@ -1329,34 +1422,41 @@ function setupBookingForm() {
             timeSlots.forEach(s => s.classList.remove('selected'));
             // Add selected class to clicked slot
             this.classList.add('selected');
+            // Hide error if shown
+            document.getElementById('timeSlotError').style.display = 'none';
         });
+    });
+
+    // Add input event listeners to clear errors when typing
+    document.getElementById('nameInput').addEventListener('input', function() {
+        document.getElementById('nameError').style.display = 'none';
+        this.classList.remove('input-error');
+    });
+
+    document.getElementById('emailInput').addEventListener('input', function() {
+        document.getElementById('emailError').style.display = 'none';
+        this.classList.remove('input-error');
+    });
+
+    document.getElementById('contactInput').addEventListener('input', function() {
+        document.getElementById('contactError').style.display = 'none';
+        this.classList.remove('input-error');
     });
 }
 
 // Form submission handler
 function submitReservation() {
-    const name = document.querySelector('input[type="text"]').value;
-    const email = document.querySelectorAll('input[type="text"]')[1].value;
+    if (!validateForm()) {
+        return; // Stop if validation fails
+    }
+    
+    const name = document.getElementById('nameInput').value;
+    const email = document.getElementById('emailInput').value;
     const partySize = document.querySelector('select').value;
-    const contact = document.querySelectorAll('input[type="text"]')[2].value;
-    const timeSlot = document.querySelector('.time-slot.selected')?.textContent;
+    const contact = document.getElementById('contactInput').value;
+    const timeSlot = document.querySelector('.time-slot.selected').textContent;
     const additionalInfo = document.getElementById('info').value;
-    const selectedDate = window.calendar.getSelectedDate();
-    
-    if (!timeSlot) {
-        alert('Please select a time slot.');
-        return;
-    }
-    
-    if (!contact.trim()) {
-        alert('Please provide your contact information.');
-        return;
-    }
-    
-    if (!selectedDate) {
-        alert('Please select a date.');
-        return;
-    }
+    const selectedDate = document.getElementById('selectedDateDisplay').innerText;
     
     const formData = new FormData();
     formData.append('name', name);
@@ -1365,7 +1465,7 @@ function submitReservation() {
     formData.append('contact', contact);
     formData.append('timeSlot', timeSlot);
     formData.append('additionalInfo', additionalInfo);
-    formData.append('selectedDate', selectedDate.toISOString());
+    formData.append('selectedDate', selectedDate);
     
     // Show loading state
     const reserveBtn = document.querySelector('.reserve-btn');
@@ -1381,14 +1481,14 @@ function submitReservation() {
     Promise.all(promises)
         .then(responses => {
             if (responses.every(r => r.ok)) {
-                alert('Reservation submitted successfully! You will receive a confirmation email shortly.');
+                window.location.href = "finalScreen.html"; // Redirect to final screen
             } else {
                 throw new Error('One or more email services failed');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was an error submitting your reservation. Please try again or contact us directly.');
+            window.location.href = "finalError.html"; // Redirect to error screen
         })
         .finally(() => {
             reserveBtn.disabled = false;

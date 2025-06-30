@@ -259,13 +259,13 @@ try {
         <!-- Header -->
         <div class="header">
             <h1>Thank You!</h1>
-            <p>The Barn Restaurant</p>
+            <p>The Barn by Starbeans</p>
         </div>
         
         <!-- Thank You Section -->
         <div class="thank-you-section">
             <h2>We have Received Your Reservation Request</h2>
-            <p>Thank you for choosing The Barn Restaurant. We are excited to serve you!</p>
+            <p>Thank you for choosing The Barn by Starbeans. We are excited to serve you!</p>
         </div>
         
         <!-- Content -->
@@ -274,7 +274,7 @@ try {
                 Dear '.$name.',
             </div>
             
-            <p>Thank you for choosing <strong>The Barn Restaurant</strong> for your dining experience! We have successfully received your reservation request and truly appreciate your request.</p>
+            <p>Thank you for choosing <strong>The Barn by Starbeans</strong> for your dining experience! We have successfully received your reservation request and truly appreciate your request.</p>
             
             <!-- Reservation Summary -->
             <div class="reservation-summary">
@@ -348,23 +348,23 @@ try {
             <div class="contact-info">
                 <h3>📞 Need to Reach Us?</h3>
                 <p>If you have any questions or need to make changes to your request:</p>
-                <p><strong>Phone:</strong> <a href="tel:{{RESTAURANT_PHONE}}">{{RESTAURANT_PHONE}}</a></p>
-                <p><strong>Email:</strong> <a href="mailto:{{RESTAURANT_EMAIL}}">{{RESTAURANT_EMAIL}}</a></p>
-                <p><strong>Address:</strong> {{RESTAURANT_ADDRESS}}</p>
+                <p><strong>Phone:</strong> <a href="tel:+94 572 232 785">+94 572 232 785</a></p>
+                <p><strong>Email:</strong> <a href="mailto:info@starbeansceylon.com">info@starbeansceylon.com</a></p>
+                <p><strong>Address:</strong> No.30 Wellawaya road Ella.</p>
             </div>
             
             <p>We look forward to welcoming you to Starbeans and providing you with an exceptional dining experience featuring the authentic tastes of the Sri Lanka.</p>
             
             <p>Warm regards,<br>
-            <strong>The Starbeans Team</strong></p>
+            <strong>The Barn by Starbeans Team</strong></p>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            <p><strong>The Barn Restaurant</strong></p>
-            <p>📍 {{RESTAURANT_ADDRESS}}</p>
-            <p>📞 {{RESTAURANT_PHONE}} | 📧 <a href="mailto:{{RESTAURANT_EMAIL}}">{{RESTAURANT_EMAIL}}</a></p>
-            <p>🌐 <a href="{{WEBSITE_URL}}" style="font-size: 15px;">Visit our website</a></p>
+            <p><strong>The Barn by Starbeans</strong></p>
+            <p>📍 No.30 Wellawaya road Ella.</p>
+            <p>📞 +94 572 232 785 | 📧 <a href="mailto:info@starbeansceylon.com">info@starbeansceylon.com</a></p>
+            <p>🌐 <a href="https://starbeans.ceylonlensmedia.com/the-barn/" style="font-size: 15px;">Visit our website</a></p>
             
             <div class="social-links" style="font-size: 15px;">
                 <a href="{{FACEBOOK_URL}}" title="Facebook">Facebook</a>
@@ -373,7 +373,7 @@ try {
             </div>
             
             <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
-                Bringing people together through great food, great coffee and good vibes since {{Year}}.
+                Bringing people together through great food, great coffee, and good vibes since 2010.
             </p>
         </div>
     </div>
@@ -389,6 +389,7 @@ try {
     $mail->Password = 'ffauohhfnynozkde';
     $mail->SMTPSecure = 'ssl';
     $mail->Port = 465;
+    $mail->CharSet = 'UTF-8';
     $mail->setFrom($email, $name);
     $mail->addReplyTo($email, $name);
     $mail->addAddress('sudheeradilum@gmail.com');
