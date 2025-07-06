@@ -1,308 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Select Your Perfect Stay</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Geist+Mono:wght@100..900&family=Marcellus&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            /* background: linear-gradient(135deg, #026008 0%, #264787 80%); */
-            background: white;
-            min-height: 100vh;
-        }
+      body {
+        line-height: 1.6;
+        background: white;
+      }
 
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            color: white;
-            background: rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-        }
+      .hero {
+        position: relative; /* Needed for absolute positioning of pseudo-element */
+        text-align: center;
+        padding: 80px 20px;
+        font-family: "Playfair Display", serif !important;
+      }
 
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.7);
+        z-index: -1;
+      }
+
+      /* Make sure text/content stays above the background */
+      .hero > * {
+        position: relative;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 1s ease-out;
+        color: white !important;
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        max-width: 600px;
+        margin: 0 auto;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease-out 0.3s both;
+        color: white !important;
+      }
+
+      .hotels-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 40px;
+      }
+
+      .hotel-card {
+        background: white;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        animation: slideInUp 0.8s ease-out;
+      }
+
+      .hotel-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      }
+
+      .hotel-image {
+        width: 100%;
+        height: 280px !important;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+      }
+
+      .hotel-card:hover .hotel-image {
+        transform: scale(1.1);
+      }
+
+      .hotel-info {
+        padding: 30px;
+      }
+
+      .hotel-name {
+        font-size: 2rem !important;
+        font-weight: 500 !important;
+        margin-bottom: 15px;
+        color: #2c3e50;
+        position: relative;
+        font-family: "Playfair Display", serif !important;
+      }
+
+      .hotel-name1::after {
+        background: #026008;
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+      }
+
+      .hotel-name2::after {
+        background: #264787;
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+      }
+
+      .hotel-card:hover .hotel-name::after {
+        width: 100px;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        font-size: 1rem;
+        color: #555;
+      }
+
+      .info-icon {
+        margin-right: 12px;
+        font-size: 1.2rem;
+        color: #667eea;
+        min-width: 20px;
+      }
+
+      .reserve-btn {
+        display: inline-block;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 3px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .reserve-btn1 {
+        background: #026008;
+      }
+
+      .reserve-btn2 {
+        background: #244a88;
+      }
+
+      .reserve-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .reserve-btn:hover::before {
+        left: 100%;
+      }
+
+      .reserve-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+      }
+
+      .reserve-btn:active {
+        transform: translateY(0);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
+          font-size: 2.5rem;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
+          font-size: 1.1rem;
         }
 
         .hotels-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
-        }
-
-        .hotel-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            animation: slideInUp 0.8s ease-out;
-        }
-
-        .hotel-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-        }
-
-        .hotel-image {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .hotel-card:hover .hotel-image {
-            transform: scale(1.1);
+          grid-template-columns: 1fr;
+          gap: 30px;
+          padding: 40px 15px;
         }
 
         .hotel-info {
-            padding: 30px;
+          padding: 20px;
         }
-
-        .hotel-name {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            position: relative;
-        }
-
-        .hotel-name1::after{
-            background: #026008;
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .hotel-name2::after{
-            background: #264787;
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-
-        .hotel-card:hover .hotel-name::after {
-            width: 100px;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 1rem;
-            color: #555;
-        }
-
-        .info-icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            color: #667eea;
-            min-width: 20px;
-        }
-
-        .reserve-btn {
-            display: inline-block;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .reserve-btn1{
-            background: #026008;
-
-        }
-
-        .reserve-btn2{
-            background: #244A88;
-
-        }
-
-        .reserve-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .reserve-btn:hover::before {
-            left: 100%;
-        }
-
-        .reserve-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-        }
-
-        .reserve-btn:active {
-            transform: translateY(0);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .hotels-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-                padding: 40px 15px;
-            }
-            
-            .hotel-info {
-                padding: 20px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <section class="hero">
-        <h1>Find Your Perfect Stay</h1>
-        <p>Discover exceptional hotels with world-class amenities and unforgettable experiences</p>
+      <h1>Find Your Perfect Stay</h1>
+      <p>
+        Discover exceptional hotels with world-class amenities and unforgettable
+        experiences
+      </p>
     </section>
 
     <div class="hotels-container">
-        <div class="hotel-card">
-            <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Grand Palace Hotel" class="hotel-image">
-            <div class="hotel-info">
-                <h2 class="hotel-name hotel-name1">The Barn</h2>
-                
-                <div class="info-item">
-                    <!-- <span class="info-icon">🕐</span> -->
-                    <span>Check-in: 3:00 PM | Check-out: 11:00 AM</span>
-                </div>
-                
-                <div class="info-item">
-                    <!-- <span class="info-icon">📞</span> -->
-                    <span>+1 (555) 123-4567</span>
-                </div>
-                
-                <div class="info-item">
-                    <!-- <span class="info-icon">📍</span> -->
-                    <span>123 Luxury Avenue, Downtown District, NY 10001</span>
-                </div>
-                
-                <a href="#" class="reserve-btn reserve-btn1">Reserve Now</a>
-            </div>
-        </div>
+      <div class="hotel-card">
+        <img
+          src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+          alt="Grand Palace Hotel"
+          class="hotel-image"
+        />
+        <div class="hotel-info">
+          <h2 class="hotel-name hotel-name1">The Barn</h2>
 
-        <div class="hotel-card">
-            <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Oceanview Resort" class="hotel-image">
-            <div class="hotel-info">
-                <h2 class="hotel-name hotel-name2">Ocean Bistro</h2>
-                
-                <div class="info-item">
-                    <!-- <span class="info-icon">🕐</span> -->
-                    <span>Check-in: 4:00 PM | Check-out: 12:00 PM</span>
-                </div>
-                
-                <div class="info-item">
-                    <!-- <span class="info-icon">📞</span> -->
-                    <span>+1 (555) 987-6543</span>
-                </div>
-                
-                <div class="info-item">
-                    <!-- <span class="info-icon">📍</span> -->
-                    <span>456 Coastal Road, Beachfront Bay, CA 90210</span>
-                </div>
-                
-                <a href="#" class="reserve-btn reserve-btn2">Reserve Now</a>
-            </div>
+          <div class="info-item">
+            <!-- <span class="info-icon">🕐</span> -->
+            <span>Check-in: 3:00 PM | Check-out: 11:00 AM</span>
+          </div>
+
+          <div class="info-item">
+            <!-- <span class="info-icon">📞</span> -->
+            <span>+1 (555) 123-4567</span>
+          </div>
+
+          <div class="info-item">
+            <!-- <span class="info-icon">📍</span> -->
+            <span>123 Luxury Avenue, Downtown District, NY 10001</span>
+          </div>
+
+          <a href="#" class="reserve-btn reserve-btn1">Reserve Now</a>
         </div>
+      </div>
+
+      <div class="hotel-card">
+        <img
+          src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+          alt="Oceanview Resort"
+          class="hotel-image"
+        />
+        <div class="hotel-info">
+          <h2 class="hotel-name hotel-name2">Ocean Bistro</h2>
+
+          <div class="info-item">
+            <!-- <span class="info-icon">🕐</span> -->
+            <span>Check-in: 4:00 PM | Check-out: 12:00 PM</span>
+          </div>
+
+          <div class="info-item">
+            <!-- <span class="info-icon">📞</span> -->
+            <span>+1 (555) 987-6543</span>
+          </div>
+
+          <div class="info-item">
+            <!-- <span class="info-icon">📍</span> -->
+            <span>456 Coastal Road, Beachfront Bay, CA 90210</span>
+          </div>
+
+          <a href="#" class="reserve-btn reserve-btn2">Reserve Now</a>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Add staggered animation to cards
-        const cards = document.querySelectorAll('.hotel-card');
-        cards.forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.2}s`;
-        });
+      // Add staggered animation to cards
+      const cards = document.querySelectorAll(".hotel-card");
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+      });
 
-        // Add click effect to reserve buttons
-        const reserveButtons = document.querySelectorAll('.reserve-btn');
-        reserveButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Create ripple effect
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.cssText = `
+      // Add click effect to reserve buttons
+      const reserveButtons = document.querySelectorAll(".reserve-btn");
+      reserveButtons.forEach((button) => {
+        button.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Create ripple effect
+          const ripple = document.createElement("span");
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+
+          ripple.style.cssText = `
                     position: absolute;
                     width: ${size}px;
                     height: ${size}px;
@@ -314,23 +347,23 @@
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
                 `;
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-                
-                // Show alert (replace with actual booking logic)
-                setTimeout(() => {
-                    alert('Redirecting to booking page...');
-                }, 100);
-            });
-        });
 
-        // Add CSS animation for ripple effect
-        const style = document.createElement('style');
-        style.textContent = `
+          this.appendChild(ripple);
+
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+
+          // Show alert (replace with actual booking logic)
+          setTimeout(() => {
+            alert("Redirecting to booking page...");
+          }, 100);
+        });
+      });
+
+      // Add CSS animation for ripple effect
+      const style = document.createElement("style");
+      style.textContent = `
             @keyframes ripple {
                 to {
                     transform: scale(4);
@@ -338,26 +371,26 @@
                 }
             }
         `;
-        document.head.appendChild(style);
+      document.head.appendChild(style);
 
-        // Add scroll reveal animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+      // Add scroll reveal animation
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        cards.forEach(card => {
-            observer.observe(card);
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
         });
+      }, observerOptions);
+
+      cards.forEach((card) => {
+        observer.observe(card);
+      });
     </script>
-</body>
+  </body>
 </html>

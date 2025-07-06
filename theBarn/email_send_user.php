@@ -392,7 +392,7 @@ try {
     $mail->CharSet = 'UTF-8';
     $mail->setFrom($email, $name);
     $mail->addReplyTo($email, $name);
-    $mail->addAddress('sudheeradilum@gmail.com');
+    $mail->addAddress($email);
     $mail->isHTML(true);
     $mail->Subject = "Your Reservation Request at The Barn Restaurant";
     $mail->Body = $body;

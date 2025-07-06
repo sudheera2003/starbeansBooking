@@ -212,7 +212,7 @@ try {
     $mail->Port = 465;
     $mail->setFrom($email, $name);
     $mail->addReplyTo($email, $name);
-    $mail->addAddress('sudheeradilum@gmail.com');
+    $mail->addAddress($email);
     $mail->isHTML(true);
     $mail->Subject = "Thanks for Feedback";
     $mail->Body = $body;
